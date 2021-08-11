@@ -1,0 +1,51 @@
+function initMap() {
+  const map = new google.maps.Map(document.getElementById("map1"), {
+    zoom: 10,
+    center: { lat: 43.6999999, lng: -79.018469 }
+  });
+}
+
+$(document).ready(function () {
+  buildMap();
+});
+
+var sw = document.body.clientWidth,
+  bp = 550,
+  $map = $(".map");
+var static =
+  "https://maps.google.com/maps/api/staticmap?center=55.7402023,12.5341835&zoom=13&markers=55.7402023,12.5341835&size=640x320&sensor=true";
+var embed =
+  '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d17968.466654375163!2d12.525454020214832!3d55.74011545712236!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x465252072f697ceb%3A0x213ff8cefbbf7d12!2sElleb%C3%A6kvej+56%2C+2820+Gentofte!5e0!3m2!1sda!2sdk!4v1409583543719" width="600" height="450" frameborder="0" style="border:0"></iframe>';
+
+function buildMap() {
+  if (sw > bp) {
+    //If Large Screen
+    if ($(".map-container").length < 1) {
+      //If map doesn't already exist
+      buildEmbed();
+    }
+  } else {
+    if ($(".static-img").length < 1) {
+      //If static image doesn't exist
+      buildStatic();
+    }
+  }
+}
+
+function buildEmbed() {
+  //Build iframe view
+  $('<div class="map-container"/>').html(embed).prependTo($map);
+}
+
+function buildStatic() {
+  //Build static map
+  var mapLink = $(".map-link").attr("href"),
+    $img = $('<img class="static-img" />').attr("src", static);
+  $("<a/>").attr("href", mapLink).html($img).prependTo($map);
+}
+
+$(window).resize(function () {
+  sw = document.body.clientWidth;
+  buildMap();
+  google.maps.event.trigger(map, "resize");
+});
